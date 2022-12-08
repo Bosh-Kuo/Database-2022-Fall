@@ -36,5 +36,5 @@ pyhton manage.py makemigration
 
 - 若有安裝新套件
 ```shell
-conda list -e > requirement.txt
+pip freeze > requirements.txt
 ```
