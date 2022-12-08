@@ -1,14 +1,15 @@
 # **E-Commerce Backend**
 
 ## **Installation**
+(如果你不是用 conda 的跳過這步)
 - 建立 Conda 虛擬環境(執行過一次就不用再執行)
 ```shell
 conda env create -f environment.yaml
 ```
 
-- 套件更新
+- 套件更新 (pip)
 ```
-conda install --yes --file requirements.txt
+pip install -r requirements.txt
 ```
 
 ## **Migrate DB**

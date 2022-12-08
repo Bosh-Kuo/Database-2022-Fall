@@ -8,6 +8,7 @@ db.sqlite3
 */*/.DS_Store
 __pycache__
 media
+.python-version
 
 
 # * frontend
