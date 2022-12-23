@@ -84,7 +84,13 @@ const Login = () => {
           >
             LogIn
           </Button>
-          <Snackbar open={alertOpen} autoHideDuration={1500}>
+          <Snackbar
+            open={alertOpen}
+            autoHideDuration={1500}
+            onClose={() => {
+              setAlertOpen(false);
+            }}
+          >
             <Alert severity={alertType} sx={{ width: "100%" }}>
               {alertMessage}
             </Alert>
