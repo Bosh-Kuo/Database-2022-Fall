@@ -2,7 +2,7 @@ import React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, createSearchParams } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -48,6 +48,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const SearchBar = ({ text, setText }) => {
   const navigate = useNavigate();
+  const param = { query: text };
 
   return (
     <Search>
@@ -58,7 +59,10 @@ const SearchBar = ({ text, setText }) => {
         onSubmit={(event) => {
           event.preventDefault();
           console.log("提交");
-          navigate("/product");
+          navigate({
+            pathname: "/search",
+            search: `${createSearchParams(param)}`,
+          });
           setText("");
         }}
       >
