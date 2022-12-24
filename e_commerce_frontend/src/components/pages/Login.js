@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
@@ -11,33 +11,46 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "../../axios";
+import AuthContext from "../../AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [alertOpen, setAlertOpen] = useState(false);
-  const [alertType, setAlertType] = useState("success");
-  const [alertMessage, setAlertMessage] = useState("Successfully log in!");
-  const handleAlert = (data) => {
-    if (
-      data.get("username").length === 0 ||
-      data.get("password").length === 0
-    ) {
-      setAlertType("error");
-      setAlertMessage("There are unfilled forms!");
-    } else {
-      setAlertType("success");
-      setAlertMessage("Successfully log in!");
-    }
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    handleAlert(data);
-    console.log({
-      username: data.get("username"),
-      password: data.get("password"),
-    });
+  const [alertType, setAlertType] = useState("error");
+  const [alertMessage, setAlertMessage] = useState("");
+  const { setAuth, setProfile, setToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleAlert = (alertType, message) => {
+    setAlertType(alertType);
+    setAlertMessage(message);
     setAlertOpen(true);
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    try {
+      // post request to backend
+      const { data } = await axios.post("login/", {
+        username: formData.get("username"),
+        password: formData.get("password"),
+      });
+
+      // 更新 context
+      setAuth(true);
+      setToken(data.token);
+      setProfile({ ...data.user_info });
+
+      // 導向首頁
+      navigate("/");
+    } catch (error) {
+      handleAlert("error", error.message);
+      console.error(error);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -53,7 +66,7 @@ const Login = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          LogIn
+          Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
