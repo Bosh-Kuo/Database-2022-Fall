@@ -11,39 +11,42 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [alertOpen, setAlertOpen] = useState(false);
-  const [alertType, setAlertType] = useState("success");
-  const [alertMessage, setAlertMessage] = useState("Successfully sign up!");
-  const handleAlert = (data) => {
-    if (
-      data.get("username").length === 0 ||
-      data.get("email").length === 0 ||
-      data.get("password").length === 0 ||
-      data.get("password-check").length === 0
-    ) {
-      setAlertType("error");
-      setAlertMessage("There are unfilled forms!");
-    } else if (data.get("password-check") !== data.get("password")) {
-      setAlertType("error");
-      setAlertMessage("Check your password again");
-    } else {
-      setAlertType("success");
-      setAlertMessage("Successfully sign up!");
-    }
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    handleAlert(data);
-    console.log({
-      username: data.get("username"),
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const [alertType, setAlertType] = useState("error");
+  const [alertMessage, setAlertMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleAlert = (alertType, message) => {
+    setAlertType(alertType);
+    setAlertMessage(message);
     setAlertOpen(true);
   };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    try {
+      // post request to backend
+      const { data } = await axios.post("register/", {
+        username: formData.get("username"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+      });
+
+      console.log(data);
+
+      // 導向 login page
+      navigate("/login");
+    } catch (error) {
+      handleAlert("error", error.message);
+      console.error(error);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
