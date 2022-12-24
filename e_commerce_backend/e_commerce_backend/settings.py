@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'corsheaders',
-    'rest_framework',
+    "corsheaders",
+    "rest_framework",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -43,11 +43,16 @@ INSTALLED_APPS = [
     "app.apps.AppConfig",
     # * django extension
     "django_extensions",
-    
+    # * Authentication Module for django rest auth
+    "knox",
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",),
+}
+
 MIDDLEWARE = [
-     'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -61,10 +66,10 @@ ROOT_URLCONF = "e_commerce_backend.urls"
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = [
-    'http://google.com',
-    'http://hostname.example.com',
-    'http://localhost:3000',
-    'http://127.0.0.1:9000'
+    "http://google.com",
+    "http://hostname.example.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:9000",
 ]
 TEMPLATES = [
     {
