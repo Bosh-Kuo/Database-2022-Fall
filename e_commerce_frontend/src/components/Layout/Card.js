@@ -22,7 +22,7 @@ const CardProduct = ({ productHome }) => {
 
   const onClickWish = async (product_id) => {
     console.log(profile.id);
-    if (profile.id == undefined) {
+    if (profile.id === undefined) {
       console.log("not a user");
     } else {
       let res = await axios
@@ -35,7 +35,7 @@ const CardProduct = ({ productHome }) => {
   };
 
   const onClickCart = async (product_id) => {
-    if (profile.id == undefined) {
+    if (profile.id === undefined) {
       console.log("not a user");
     } else {
       let res = await axios
@@ -60,9 +60,8 @@ const CardProduct = ({ productHome }) => {
             cover={
               <img
                 style={{
-                  width: " 300px",
-                  height: "200px",
-                  objectFit: " cover",
+                  width: "100%",
+                  height: "100%",
                 }}
                 alt={product.alt}
                 src={"http://127.0.0.1:8000/" + product.image}
