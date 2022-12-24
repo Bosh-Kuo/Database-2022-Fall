@@ -14,7 +14,7 @@ const HeaderMenu = ({ anchorElUser, handleCloseUserMenu }) => {
 
   useEffect(() => {
     if (auth) {
-      setItems(["user", "cart", "wishlist", "logout"]);
+      setItems(["user", "transaction", "cart", "wishlist", "logout"]);
     } else {
       setItems(["login", "register"]);
     }
