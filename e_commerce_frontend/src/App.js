@@ -7,6 +7,7 @@ import Wishlist from "./components/pages/Wishlist";
 import Layout from "./components/Layout/Layout";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
+import Search from "./components/pages/Search";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
