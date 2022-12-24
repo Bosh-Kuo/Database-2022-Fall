@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers, validators
 
-from .models import (Cart, Category, Product, Product_Comment, Tag,
-                     Transaction, Wishlist)
+from .models import Cart, Category, Product, Product_Comment, Tag, Transaction, Wishlist
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -16,24 +15,52 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = "__all__"
 
+
 class ProductSerializer(serializers.ModelSerializer):
     tag = TagSerializer(read_only=True, many=True)
-    category = CategorySerializer()
+    category = CategorySerializer("")
+    sellerName = serializers.CharField(source="seller.username", read_only=True)
 
-    class Meta :
-            model = Product
-            fields =  ['id' , 'name' , 'seller' , 'category' ,  'price' ,'description' ,'image' ,'tag']
-            
+    class Meta:
+        model = Product
+        fields = [
+            "id",
+            "name",
+            "seller",
+            "category",
+            "price",
+            "description",
+            "image",
+            "tag",
+            "sellerName",
+        ]
+
+
 class TransactionSerializer(serializers.ModelSerializer):
+    buyerName = serializers.CharField(source="buyer.username", read_only=True)
+    sellerName = serializers.CharField(source="seller.username", read_only=True)
+    productName = serializers.CharField(source="product.name", read_only=True)
+
     class Meta:
         model = Transaction
-        fields = ["id", "buyer", "seller", "product", "date"]
+        fields = [
+            "id",
+            "buyer",
+            "seller",
+            "product",
+            "date",
+            "buyerName",
+            "sellerName",
+            "productName",
+        ]
 
 
 class ProductCommentSerializer(serializers.ModelSerializer):
+    buyerName = serializers.CharField(source="buyer.username", read_only=True)
+
     class Meta:
         model = Product_Comment
-        fields = ["id", "buyer", "comment","rating"]
+        fields = ["id", "buyer", "comment", "rating", "buyerName"]
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -61,20 +88,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
+
 class WishlistSerializer(serializers.ModelSerializer):
-    class Meta :
-        model = Wishlist 
-        fields =["id","user","product"] 
+    class Meta:
+        model = Wishlist
+        fields = ["id", "user", "product"]
+
 
 class CartSerializer(serializers.ModelSerializer):
-    class Meta :
+    class Meta:
         model = Cart
-        fields = ["id" , "user" , "product"]   
+        fields = ["id", "user", "product"]
+
 
 class CartSerializer(serializers.ModelSerializer):
-    class Meta :
+    class Meta:
         model = Cart
-        fields = ["id" , "user" , "product"]    
-
-
-
+        fields = ["id", "user", "product"]
