@@ -1,12 +1,12 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
+
 const HeaderTitle = () => {
   return (
     <Typography
       variant="h6"
       noWrap
       component="a"
-      href="/"
       sx={{
         mr: 2,
         display: { xs: "flex", md: "flex" },
