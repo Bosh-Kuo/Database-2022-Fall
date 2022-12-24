@@ -85,6 +85,7 @@ const Product = () => {
             backgroundImage: `url(http://127.0.0.1:8000/${data.image})`,
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
           }}
         >
           <Carousel autoplay dots={true} dotPosition={"bottom"}>
@@ -92,7 +93,6 @@ const Product = () => {
               style={{
                 backgroundImage: `url(http://127.0.0.1:8000/${data.image})`,
                 backgroundPosition: "center",
-
                 backgroundRepeat: "no-repeat",
               }}
             ></div>
@@ -119,7 +119,7 @@ const Product = () => {
               </Descriptions.Item>
 
               <Descriptions.Item label="Seller">
-                {data.seller}
+                {data.sellerName}
               </Descriptions.Item>
             </Descriptions>
             <br></br>
@@ -145,7 +145,7 @@ const Product = () => {
                     <Avatar src="https://picsum.photos/200/300" />
                   </ListItemAvatar>
                   <ListItemText
-                    primary={itemComment.buyer}
+                    primary={itemComment.buyerName}
                     secondary={
                       <React.Fragment>
                         <Typography

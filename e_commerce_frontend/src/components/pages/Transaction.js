@@ -5,14 +5,23 @@ import AuthContext from "../../AuthProvider";
 
 const columns = [
   {
-    title: "Product",
+    title: "Product Id",
     dataIndex: "product",
+    key: "productId",
+  },
+  {
+    title: "Product Name",
+    dataIndex: "productName",
     key: "product",
-    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: "Seller",
+    dataIndex: "sellerName",
+    key: "seller",
   },
   {
     title: "Buyer",
-    dataIndex: "buyer",
+    dataIndex: "buyerName",
     key: "buyer",
   },
   {
