@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const getCart = async () => {
     if (profile.id) {
-      let res = await axios.get("cart/" + profile.id);
+      const res = await axios.get("cart/" + profile.id);
       setCart(res.data.data);
     }
   };
