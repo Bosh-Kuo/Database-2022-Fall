@@ -1,21 +1,22 @@
 import React, { useContext } from "react";
 import { Card } from "antd";
-import {
-  HeartOutlined,
-  ShoppingCartOutlined,
-  HeartFilled,
-} from "@ant-design/icons";
+import { HeartTwoTone, ShoppingTwoTone } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import axios from "../../axios";
 import AuthContext from "../../AuthProvider";
 const { Meta } = Card;
 
 const CardProduct = ({ products }) => {
   const navigate = useNavigate();
-  const { profile } = useContext(AuthContext);
-  const navigateToProduct = (e, id, name) => {
-    // 👇️ navigate to /contacts
-    console.log(name);
+  const { wishlist, cart, onClickCart, onClickWish } = useContext(AuthContext);
+
+  const inWishlist = (name) => {
+    return wishlist.some((item) => item.productName === name);
+  };
+  const inCart = (name) => {
+    return cart.some((item) => item.productName === name);
+  };
+
+  const navigateToProduct = (id, name) => {
     navigate("/product/" + id, {
       state: {
         productId: id,
@@ -24,35 +25,6 @@ const CardProduct = ({ products }) => {
     });
   };
 
-  const onClickWish = async (product_id) => {
-    console.log(profile.id);
-    if (profile.id === undefined) {
-      console.log("not a user");
-    } else {
-      let res = await axios
-        .post("/addwishlist/", { user: profile.id, product: product_id })
-        .catch(function (error) {
-          console.log(error);
-        });
-      console.log(res.data);
-    }
-  };
-
-  const onClickCart = async (product_id) => {
-    if (profile.id === undefined) {
-      console.log("not a user");
-    } else {
-      let res = await axios
-        .post("/addcart/", {
-          user: profile.id,
-          product: product_id,
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      console.log(res.data);
-    }
-  };
   return (
     <div style={{ display: "flex", flexWrap: "wrap", margin: "70px" }}>
       {products.map((product) => {
@@ -70,16 +42,18 @@ const CardProduct = ({ products }) => {
                 }}
                 alt={product.alt}
                 src={"http://127.0.0.1:8000/" + product.image}
-                onClick={(e) => navigateToProduct(e, product.id, product.name)}
+                onClick={(e) => navigateToProduct(product.id, product.name)}
               />
             }
             actions={[
-              <HeartOutlined
+              <HeartTwoTone
                 key="heart"
+                twoToneColor={inWishlist(product.name) ? "red" : "LightGray"}
                 onClick={(e) => onClickWish(product.id)}
               />,
-              <ShoppingCartOutlined
+              <ShoppingTwoTone
                 key="cart"
+                twoToneColor={inCart(product.name) ? "blue" : "LightGray"}
                 onClick={(e) => onClickCart(product.id)}
               />,
             ]}

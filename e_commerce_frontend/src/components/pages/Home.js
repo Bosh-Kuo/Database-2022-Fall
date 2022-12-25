@@ -1,52 +1,38 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../axios";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
-import AuthContext from "../../AuthProvider";
 import CardHome from "../Layout/Card";
 
 const Home = () => {
-  const [productHome, setproductHome] = useState([]);
+  const [productHome, setProductHome] = useState([]);
   const [tag, setTag] = useState([]);
   const [category, setCategory] = useState([]);
   const [SearchTagValue, setSearchTagValue] = useState([]);
   const [SearchCategoryValue, setSearchCategoryValue] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const { profile } = useContext(AuthContext);
-  console.log(profile);
+
   useEffect(() => {
     const getProduct = async () => {
-      let res = await axios.get("products/");
-      setproductHome(res.data.data);
-      console.log(res.data.data);
+      const res = await axios.get("products/");
+      setProductHome(res.data.data);
     };
     const getTag = async () => {
-      let res = await axios.get("tag/");
+      const res = await axios.get("tag/");
       setTag(res.data.data);
-      console.log(res.data.data);
     };
 
     const getCat = async () => {
-      let res = await axios.get("category/");
+      const res = await axios.get("category/");
       setCategory(res.data.data);
-      console.log(res.data.data);
-    };
-
-    const getWish = async () => {
-      if (profile.id !== undefined) {
-        console.log("a user");
-        let res = await axios.get("wishlist/" + profile.id);
-        console.log(res.data.data);
-        setWishlist(res.data.data);
-      }
     };
 
     getProduct();
     getTag();
     getCat();
-    getWish();
+
+    // eslint-disable-next-line
   }, []);
 
   const CategoryTagSearch = async () => {
@@ -58,7 +44,7 @@ const Home = () => {
     let data = res.data.data;
     console.log(res.data.data);
     if (data) {
-      setproductHome(data);
+      setProductHome(data);
       console.log(res.data.data);
     }
   };
