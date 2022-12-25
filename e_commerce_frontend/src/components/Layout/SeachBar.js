@@ -58,7 +58,6 @@ const SearchBar = ({ text, setText }) => {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          console.log("提交");
           navigate({
             pathname: "/search",
             search: `${createSearchParams(param)}`,

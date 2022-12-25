@@ -30,7 +30,6 @@ const Header = () => {
     navigate("/");
   };
 
-  console.log(text);
   return (
     <div>
       <AppBar position="static">
