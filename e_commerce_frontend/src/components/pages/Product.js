@@ -150,11 +150,6 @@ const Product = () => {
                 add to cart
               </Button>
             )}
-            {/* <Button variant="contained" onClick={(e) => onClickCart(productId)}>
-              {cart.some((item) => item.productName === productName)
-                ? "remove from cart"
-                : "add to cart"}
-            </Button> */}
           </Space>
         </div>
       </div>

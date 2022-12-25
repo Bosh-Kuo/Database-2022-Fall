@@ -7,7 +7,8 @@ const { Meta } = Card;
 
 const CardProduct = ({ products }) => {
   const navigate = useNavigate();
-  const { wishlist, cart, onClickCart, onClickWish } = useContext(AuthContext);
+  const { profile, wishlist, cart, onClickCart, onClickWish } =
+    useContext(AuthContext);
 
   const inWishlist = (name) => {
     return wishlist.some((item) => item.productName === name);
@@ -50,11 +51,19 @@ const CardProduct = ({ products }) => {
                 key="heart"
                 twoToneColor={inWishlist(product.name) ? "red" : "LightGray"}
                 onClick={(e) => onClickWish(product.id)}
+                style={{
+                  pointerEvents:
+                    profile.id === product.seller ? "none" : "auto",
+                }}
               />,
               <ShoppingTwoTone
                 key="cart"
                 twoToneColor={inCart(product.name) ? "blue" : "LightGray"}
                 onClick={(e) => onClickCart(product.id)}
+                style={{
+                  pointerEvents:
+                    profile.id === product.seller ? "none" : "auto",
+                }}
               />,
             ]}
           >

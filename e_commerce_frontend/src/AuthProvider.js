@@ -56,6 +56,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const onClickBuy = async (productId, sellerId) => {
+    try {
+      await axios.post("/transaction/", {
+        buyer: profile.id,
+        seller: sellerId,
+        product: productId,
+      });
+      setOperation(operation + 1);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (auth === false || !token) {
       setAuth(false);
@@ -84,6 +97,7 @@ export const AuthProvider = ({ children }) => {
     getCart,
     onClickWish,
     onClickCart,
+    onClickBuy,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

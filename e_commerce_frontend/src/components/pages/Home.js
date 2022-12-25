@@ -34,6 +34,7 @@ const Home = () => {
 
     // eslint-disable-next-line
   }, []);
+  console.log(productHome);
 
   const CategoryTagSearch = async () => {
     console.log("search by", SearchCategoryValue, SearchTagValue);
