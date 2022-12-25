@@ -5,12 +5,26 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import (Cart, Category, Product, Product_Comment, Tag,
-                     Transaction, User, Wishlist)
-from .serializers import (CartSerializer, CategorySerializer,
-                          ProductCommentSerializer, ProductSerializer,
-                          RegisterSerializer, TagSerializer,
-                          TransactionSerializer, WishlistSerializer)
+from .models import (
+    Cart,
+    Category,
+    Product,
+    Product_Comment,
+    Tag,
+    Transaction,
+    User,
+    Wishlist,
+)
+from .serializers import (
+    CartSerializer,
+    CategorySerializer,
+    ProductCommentSerializer,
+    ProductSerializer,
+    RegisterSerializer,
+    TagSerializer,
+    TransactionSerializer,
+    WishlistSerializer,
+)
 
 
 @api_view(["GET"])
@@ -115,27 +129,29 @@ def register(request):
 
 
 @api_view(["POST"])
-def add_to_wishlist(request):
-    if request.method == "POST":
+def update_wishlist(request):
+    if request.method == "POST" or request.method == "Delete":
         find_id = User.objects.get(id=request.data["user"])
         find_product = Product.objects.get(id=request.data["product"])
         try:
-            addWish = Wishlist.objects.get(user=find_id, product=find_product)
+            exist_product = Wishlist.objects.get(user=find_id, product=find_product)
+            exist_product.delete()
+            return Response({"status": "removed"})
         except Wishlist.DoesNotExist:
             serializer = Wishlist.objects.create(user=find_id, product=find_product)
             serializer.save()
-            return Response({"data": "saved"})
-
-        return Response({"data": "already saved"})
+            return Response({"status": "saved"})
 
 
 @api_view(["POST"])
-def add_to_cart(request):
+def update_cart(request):
     if request.method == "POST":
         find_id = User.objects.get(id=request.data["user"])
         find_product = Product.objects.get(id=request.data["product"])
         try:
-            addCart = Cart.objects.get(user=find_id, product=find_product)
+            exist_product = Cart.objects.get(user=find_id, product=find_product)
+            exist_product.delete()
+            return Response({"status": "removed"})
         except Cart.DoesNotExist:
             serializer = Cart.objects.create(user=find_id, product=find_product)
             serializer.save()
@@ -210,12 +226,11 @@ def search(request):
 
 
 @api_view(["GET"])
-def get_wishlist(request, userid):
-    print(userid)
+def get_wishlist(request, user_id):
     if request.method == "GET":
-        find_user = User.objects.get(id=userid)
+        find_user = User.objects.get(id=user_id)
         try:
-            wishlist = Wishlist.objects.filter(user = find_user)
+            wishlist = Wishlist.objects.filter(user=find_user)
 
         except Wishlist.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -223,16 +238,16 @@ def get_wishlist(request, userid):
         serializer = WishlistSerializer(wishlist, many=True)
         return Response({"data": serializer.data})
 
+
 @api_view(["GET"])
-def get_cart(request, userid):
-    print(userid)
+def get_cart(request, user_id):
     if request.method == "GET":
-        find_user = User.objects.get(id=userid)
+        find_user = User.objects.get(id=user_id)
         try:
-            cart =Cart.objects.filter(user = find_user)
+            cart = Cart.objects.filter(user=find_user)
 
         except Cart.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = WishlistSerializer(cart, many=True)
+        serializer = CartSerializer(cart, many=True)
         return Response({"data": serializer.data})
