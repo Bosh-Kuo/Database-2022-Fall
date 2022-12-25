@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Card } from "antd";
-import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import Chip from "@mui/material/Chip";
 import TextField from "@mui/material/TextField";
@@ -9,15 +6,13 @@ import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import AuthContext from "../../AuthProvider";
 import CardHome from "../Layout/Card";
-const { Meta } = Card;
+
 const Home = () => {
   const [productHome, setproductHome] = useState([]);
   const [tag, setTag] = useState([]);
   const [category, setCategory] = useState([]);
   const [SearchTagValue, setSearchTagValue] = useState([]);
   const [SearchCategoryValue, setSearchCategoryValue] = useState([]);
-
-  const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
   console.log(profile);
   useEffect(() => {
@@ -115,7 +110,7 @@ const Home = () => {
           Search By
         </Button>
       </div>
-      <CardHome productHome={productHome} />
+      <CardHome products={productHome} />
     </>
   );
 };
