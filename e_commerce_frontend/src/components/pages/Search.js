@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Typography } from "antd";
+import CardSearch from "../Layout/Card";
+import axios from "../../axios";
 
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams.get("query"));
+  const { Title } = Typography;
+  const [searchParams] = useSearchParams();
+  const [productSearch, setProductSearch] = useState([]);
+
+  useEffect(() => {
+    const searchProduct = async () => {
+      const res = await axios.post("/search/", {
+        query: searchParams.get("query"),
+      });
+      setProductSearch(res.data.products);
+    };
+    searchProduct(productSearch);
+    // eslint-disable-next-line
+  }, [searchParams]);
+  console.log(productSearch);
 
   return (
     <>
-      {`query: ${searchParams.get("query")}`}
-      <div style={{ display: "flex", flexWrap: "wrap", margin: "70px" }}></div>
+      <Title
+        type="secondary"
+        level={2}
+        style={{ textAlign: "center" }}
+      >{`query: ${searchParams.get("query")}`}</Title>
+      <CardSearch products={productSearch}></CardSearch>
     </>
   );
 };
