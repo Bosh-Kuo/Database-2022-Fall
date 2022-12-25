@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Card } from "antd";
 import { HeartOutlined, ShoppingCartOutlined } from "@ant-design/icons";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "../../axios";
 import AuthContext from "../../AuthProvider";
 const { Meta } = Card;
 
-const CardProduct = ({ productHome }) => {
+const CardProduct = ({ products }) => {
   const navigate = useNavigate();
   const { profile } = useContext(AuthContext);
   const navigateToProduct = (e, id, name) => {
@@ -51,7 +51,7 @@ const CardProduct = ({ productHome }) => {
   };
   return (
     <div style={{ display: "flex", flexWrap: "wrap", margin: "70px" }}>
-      {productHome.map((product) => {
+      {products.map((product) => {
         return (
           <Card
             style={{ width: "300px", margin: "10px" }}
