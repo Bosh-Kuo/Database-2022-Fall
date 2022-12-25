@@ -1,4 +1,4 @@
-import { Space, Table, Tag } from "antd";
+import { Table } from "antd";
 import axios from "../../axios";
 import { useState, useEffect, useContext } from "react";
 import AuthContext from "../../AuthProvider";
@@ -43,6 +43,7 @@ const Transaction = () => {
     axios.get("transactionSeller/" + profile.id).then((res) => {
       setSellerTrans(res.data.data);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
