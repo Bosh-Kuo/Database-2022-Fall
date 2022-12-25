@@ -1,16 +1,28 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.db.models import Q
 from knox.auth import AuthToken
 from rest_framework import status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import (Cart, Category, Product, Product_Comment, Tag,
-                     Transaction, User, Wishlist)
-from .serializers import (CategorySerializer, ProductCommentSerializer,
-                          ProductSerializer, RegisterSerializer, TagSerializer,
-                          TransactionSerializer)
+from .models import (
+    Cart,
+    Category,
+    Product,
+    Product_Comment,
+    Tag,
+    Transaction,
+    User,
+    Wishlist,
+)
+from .serializers import (
+    CategorySerializer,
+    ProductCommentSerializer,
+    ProductSerializer,
+    RegisterSerializer,
+    TagSerializer,
+    TransactionSerializer,
+)
 
 
 @api_view(["GET"])
@@ -113,45 +125,49 @@ def register(request):
         # _, token = AuthToken.objects.create(user)
         return Response({"user_info": serialize_user(user)})
 
-@api_view(["POST" ])
+
+@api_view(["POST"])
 def add_to_wishlist(request):
-          if request.method == "POST":
-            find_id = User.objects.get(id=request.data["user"])
-            find_product = Product.objects.get(id = request.data["product"])
-            try :
-                addWish =  Wishlist.objects.get(user=find_id , product=find_product)
-            except Wishlist.DoesNotExist:
-                   serializer = Wishlist.objects.create(user=find_id, product=find_product)
-                   serializer.save()
-                   return Response({'data': "saved"})
+    if request.method == "POST":
+        find_id = User.objects.get(id=request.data["user"])
+        find_product = Product.objects.get(id=request.data["product"])
+        try:
+            addWish = Wishlist.objects.get(user=find_id, product=find_product)
+        except Wishlist.DoesNotExist:
+            serializer = Wishlist.objects.create(user=find_id, product=find_product)
+            serializer.save()
+            return Response({"data": "saved"})
 
-            return Response({'data': "already saved"})
-       
-@api_view(["POST" ])
+        return Response({"data": "already saved"})
+
+
+@api_view(["POST"])
 def add_to_cart(request):
-          if request.method == "POST":
-            find_id = User.objects.get(id=request.data["user"])
-            find_product = Product.objects.get(id = request.data["product"])
-            try :
-                addCart =  Cart.objects.get(user=find_id , product=find_product)
-            except Cart.DoesNotExist:
-                   serializer = Cart.objects.create(user=find_id, product=find_product)
-                   serializer.save()
-                   return Response({'data': "saved"})
+    if request.method == "POST":
+        find_id = User.objects.get(id=request.data["user"])
+        find_product = Product.objects.get(id=request.data["product"])
+        try:
+            addCart = Cart.objects.get(user=find_id, product=find_product)
+        except Cart.DoesNotExist:
+            serializer = Cart.objects.create(user=find_id, product=find_product)
+            serializer.save()
+            return Response({"data": "saved"})
 
-            return Response({'data': "already saved"})    
+        return Response({"data": "already saved"})
 
 
 @api_view(["POST"])
 def add_comment(request):
     if request.method == "POST":
-            find_id = User.objects.get(id=request.data["user"])
-            find_product = Product.objects.get(id = request.data["product"])
-            aComment = request.data["comment"]
-            aRating = request.data["rating"]
-            newComment = Product_Comment.objects.create(buyer=find_id, product=find_product,comment=aComment,rating = aRating)
-            newComment.save()
-            return Response({'data': "saved"})
+        find_id = User.objects.get(id=request.data["user"])
+        find_product = Product.objects.get(id=request.data["product"])
+        aComment = request.data["comment"]
+        aRating = request.data["rating"]
+        newComment = Product_Comment.objects.create(
+            buyer=find_id, product=find_product, comment=aComment, rating=aRating
+        )
+        newComment.save()
+        return Response({"data": "saved"})
 
 
 @api_view(["POST"])
@@ -160,11 +176,11 @@ def search_by_genres(request):
     if request.method == "POST":
         dataTag = request.data["tag"]
         dataCat = request.data["category"]
-        resTag = [ sub["id"] for sub in  dataTag ]
-        resCat = [ sub["id"] for sub in  dataCat ]
+        resTag = [sub["id"] for sub in dataTag]
+        resCat = [sub["id"] for sub in dataCat]
         # print(data)
-        print(resTag==True)
-        print(resCat== True)
+        print(resTag == True)
+        print(resCat == True)
         # find_cat = Category.objects.filter(name=resCat)
         # find_tag = Tag.objects.filter(name=resTag)
 
@@ -173,26 +189,33 @@ def search_by_genres(request):
                 products = Product.objects.all()
                 serializer = ProductSerializer(products, many=True)
                 return Response({"data": serializer.data})
-              
+
             elif resCat == []:
-                filterData = Product.objects.filter(tag__in = resTag)
-                serializer = ProductSerializer(filterData,many=True)
-                return Response({"data":serializer.data})
+                filterData = Product.objects.filter(tag__in=resTag)
+                serializer = ProductSerializer(filterData, many=True)
+                return Response({"data": serializer.data})
             elif resTag == []:
-                filterData = Product.objects.filter(category__in= resCat)
-                serializer = ProductSerializer(filterData,many=True)
-                return Response({"data":serializer.data})
+                filterData = Product.objects.filter(category__in=resCat)
+                serializer = ProductSerializer(filterData, many=True)
+                return Response({"data": serializer.data})
             else:
-                filterData = Product.objects.filter(category__in= resCat,tag__in = resTag)
-                serializer = ProductSerializer(filterData,many=True)
-                return Response({"data":serializer.data})
-              
+                filterData = Product.objects.filter(category__in=resCat, tag__in=resTag)
+                serializer = ProductSerializer(filterData, many=True)
+                return Response({"data": serializer.data})
 
         except Product.DoesNotExist:
-          return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-      
-    
 
-        
-    
+@api_view(["POST"])
+def search(request):
+    query = request.data["query"]
+    if query:
+        # * Q: django 的查詢語句
+        products = Product.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query)
+        )
+        serializer = ProductSerializer(products, many=True)
+        return Response({"products": serializer.data})
+    else:
+        return Response({"products": []})

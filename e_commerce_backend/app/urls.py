@@ -1,4 +1,3 @@
-
 """e_commerce_backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -33,10 +32,11 @@ urlpatterns = [
     path("login/", views.login),
     path("register/", views.register),
     path("logout/", knox_viwes.LogoutView().as_view()),
-    path("addwishlist/",views.add_to_wishlist),
-    path("addcart/",views.add_to_cart),
-    path("newcomment/",views.add_comment),
-    path("searchByGenres/",views.search_by_genres)
+    path("addwishlist/", views.add_to_wishlist),
+    path("addcart/", views.add_to_cart),
+    path("newcomment/", views.add_comment),
+    path("searchByGenres/", views.search_by_genres),
+    path("search/", views.search),
 ]
 
 
