@@ -180,6 +180,12 @@ def add_to_transaction(request):
         sold_product = Product.objects.get(id=productId, seller=sellerId)
         sold_product.product_status = "S"
         sold_product.save()
+        # 刪除含有此 product 的 wishList
+        try:
+            exist_wishlist_items = Wishlist.objects.filter(product=productId)
+            exist_wishlist_items.delete()
+        except Wishlist.DoesNotExist:
+            pass
 
         return Response({"status": "successfully add to transaction"})
 
