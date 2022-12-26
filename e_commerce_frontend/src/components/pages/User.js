@@ -5,16 +5,20 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
+import CardActions from "@mui/material/CardActions";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Paper from "@mui/material/Paper";
 import AuthContext from "../../AuthProvider";
 import axios from "../../axios";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const [sellerProducts, setSellerProducts] = useState([]);
   const [update, setUpdate] = useState(false);
   const { profile } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getSellerProducts = async () => {
@@ -74,6 +78,21 @@ const User = () => {
                   image={"http://127.0.0.1:8000/" + product.image}
                   alt="product"
                 />
+                <CardActions>
+                  <Button
+                    size="medium"
+                    onClick={() => {
+                      navigate("/product/" + product.id, {
+                        state: {
+                          productId: product.id,
+                          productName: product.name,
+                        },
+                      });
+                    }}
+                  >
+                    Learn More
+                  </Button>
+                </CardActions>
               </Card>
             );
           })}

@@ -12,9 +12,11 @@ import Paper from "@mui/material/Paper";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import AuthContext from "../../AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, onClickCart, onClickBuy } = useContext(AuthContext);
+  const navigate = useNavigate();
   console.log(cart);
 
   return (
@@ -48,7 +50,14 @@ const Cart = () => {
                 style={{ display: "flex" }}
               >
                 <CardActionArea
-                  onClick={() => { }}
+                  onClick={() => {
+                    navigate("/product/" + item.product, {
+                      state: {
+                        productId: item.product,
+                        productName: item.productName,
+                      },
+                    });
+                  }}
                   style={{ flex: 8, display: "flex" }}
                 >
                   <CardMedia

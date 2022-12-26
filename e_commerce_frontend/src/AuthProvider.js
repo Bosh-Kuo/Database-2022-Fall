@@ -76,9 +76,11 @@ export const AuthProvider = ({ children }) => {
       setProfile({});
       setWishlist([]);
       setCart([]);
+    } else {
+      getWishList();
+      getCart();
     }
-    getWishList();
-    getCart();
+
     // eslint-disable-next-line
   }, [auth, token, operation]);
 

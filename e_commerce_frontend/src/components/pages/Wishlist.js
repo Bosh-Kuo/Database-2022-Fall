@@ -13,13 +13,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import AuthContext from "../../AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const Wishlist = () => {
   const { wishlist, cart, onClickWish, onClickCart } = useContext(AuthContext);
+  const navigate = useNavigate();
+  console.log(wishlist);
+
   const inCart = (name) => {
     return cart.some((item) => item.productName === name);
   };
-  console.log(wishlist);
 
   return (
     <Paper style={{ margin: "10px", padding: "50px" }}>
@@ -51,7 +54,14 @@ const Wishlist = () => {
                 style={{ display: "flex" }}
               >
                 <CardActionArea
-                  onClick={() => { }}
+                  onClick={() => {
+                    navigate("/product/" + item.product, {
+                      state: {
+                        productId: item.product,
+                        productName: item.productName,
+                      },
+                    });
+                  }}
                   style={{ flex: 8, display: "flex" }}
                 >
                   <CardMedia

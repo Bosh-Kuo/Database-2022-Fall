@@ -12,6 +12,7 @@ import React from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "../../axios";
 import { useState, useEffect, useContext } from "react";
 import AuthContext from "../../AuthProvider";
@@ -126,8 +127,11 @@ const Product = () => {
             ) : (
               <Button
                 variant="contained"
-                startIcon={<AddShoppingCartIcon />}
+                startIcon={<FavoriteIcon />}
                 onClick={(e) => onClickWish(productId)}
+                style={{
+                  pointerEvents: profile.id === data.seller ? "none" : "auto",
+                }}
               >
                 add to wishlist
               </Button>
@@ -146,6 +150,9 @@ const Product = () => {
                 variant="contained"
                 startIcon={<AddShoppingCartIcon />}
                 onClick={(e) => onClickCart(productId)}
+                style={{
+                  pointerEvents: profile.id === data.seller ? "none" : "auto",
+                }}
               >
                 add to cart
               </Button>
