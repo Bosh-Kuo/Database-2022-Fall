@@ -10,70 +10,58 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import axios from "../../axios";
 import { useState, useEffect, useContext } from "react";
 import AuthContext from "../../AuthProvider";
 import Rating from "@mui/material/Rating";
+
 const Product = () => {
   const params = useLocation();
   const [data, setData] = useState([]);
-  const [Bcomment, setBComment] = useState([]);
+  const [buyerComment, setBuyerComment] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [value, setValue] = useState([]);
-  const productid = params.state.productId;
-  const productname = params.state.productName;
-  const { profile } = useContext(AuthContext);
-  const [ControlValue, setControlValue] = useState("");
+  const productId = params.state.productId;
+  const productName = params.state.productName;
+  const { profile, cart, wishlist, onClickWish, onClickCart } =
+    useContext(AuthContext);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     const getPid = async () => {
-      let res = await axios.get("/products/" + productid);
+      let res = await axios.get("/products/" + productId);
       console.log(res.data.data);
       setData(res.data.data);
     };
 
     const getChatRec = async () => {
-      let res = await axios.get("/products/comment/" + productid);
+      let res = await axios.get("/products/comment/" + productId);
       console.log(res.data.data);
-      setBComment(res.data.data);
+      setBuyerComment(res.data.data);
     };
     getPid();
     getChatRec();
     // eslint-disable-next-line
-  }, [ControlValue]);
+  }, [update]);
 
-  const onClickSendComment = async (product_id, postCommnet) => {
-    if (profile.id === undefined) {
-      console.log("not a user");
+  const onClickSendComment = async (product_id, postComment) => {
+    if (!profile.id) {
+      console.log("please login");
     } else {
-      console.log("newComment", newComment);
-      let res = await axios.post("/newcomment/", {
+      let res = await axios.post("/newComment/", {
         user: profile.id,
         product: product_id,
-        comment: postCommnet,
+        comment: postComment,
         rating: value,
       });
       console.log(res.data);
-      setControlValue(postCommnet);
+      setUpdate(!update);
       setNewComment("");
     }
   };
 
-  const onClickCart = async (product_id) => {
-    if (profile.id === undefined) {
-      console.log("not a user");
-    } else {
-      let res = await axios
-        .post("/addcart/", {
-          user: profile.id,
-          product: product_id,
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-      console.log(res.data);
-    }
-  };
   return (
     <div style={{ marginBottom: "40px" }}>
       <div style={{ display: " flex" }}>
@@ -110,7 +98,7 @@ const Product = () => {
         </div>
         <div>
           <div style={{ width: "700px", height: "300px", marginTop: "100px" }}>
-            <Descriptions title={productname} bordered={true}>
+            <Descriptions title={productName} bordered={true}>
               <Descriptions.Item label="Description" span={3}>
                 {data.description}
               </Descriptions.Item>
@@ -126,10 +114,42 @@ const Product = () => {
             <br></br>
           </div>
           <Space wrap style={{ marginLeft: "450px" }}>
-            <Button variant="contained" onClick={(e) => onClickCart(productid)}>
-              add to cart
-            </Button>
-            {/* <Button variant="contained">Buy</Button> */}
+            {wishlist.some((item) => item.productName === productName) ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<DeleteIcon />}
+                onClick={(e) => onClickWish(productId)}
+              >
+                remove from wishlist
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                startIcon={<AddShoppingCartIcon />}
+                onClick={(e) => onClickWish(productId)}
+              >
+                add to wishlist
+              </Button>
+            )}
+            {cart.some((item) => item.productName === productName) ? (
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<DeleteIcon />}
+                onClick={(e) => onClickCart(productId)}
+              >
+                remove from cart
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                startIcon={<AddShoppingCartIcon />}
+                onClick={(e) => onClickCart(productId)}
+              >
+                add to cart
+              </Button>
+            )}
           </Space>
         </div>
       </div>
@@ -138,7 +158,7 @@ const Product = () => {
         <List
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
         >
-          {Bcomment?.map((itemComment, index) => {
+          {buyerComment?.map((itemComment, index) => {
             return (
               <div key={index}>
                 <ListItem alignItems="flex-start">
@@ -187,7 +207,7 @@ const Product = () => {
                   marginLeft: "10px",
                 }}
                 variant="contained"
-                onClick={(e) => onClickSendComment(productid, newComment)}
+                onClick={(e) => onClickSendComment(productId, newComment)}
               >
                 Send
               </Button>

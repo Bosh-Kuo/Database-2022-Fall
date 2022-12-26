@@ -23,22 +23,24 @@ from . import views
 
 urlpatterns = [
     path("products/", views.product_list),
-    path("products/<int:productid>", views.product_detail),
+    path("products/<int:productId>", views.product_detail),
+    path("sellerProducts/<int:sellerId>", views.get_seller_products),
+    path("transaction/", views.add_to_transaction),
     path("transactionBuyer/<int:id>", views.transactionBuyer_list),
     path("transactionSeller/<int:id>", views.transactionSeller_list),
-    path("products/comment/<int:productid>", views.product_comment_list),
+    path("products/comment/<int:productId>", views.product_comment_list),
     path("tag/", views.tag_list),
     path("category/", views.category_list),
     path("login/", views.login),
     path("register/", views.register),
     path("logout/", knox_viwes.LogoutView().as_view()),
-    path("addwishlist/", views.add_to_wishlist),
-    path("addcart/", views.add_to_cart),
-    path("newcomment/", views.add_comment),
+    path("updateWishlist/", views.update_wishlist),
+    path("updateCart/", views.update_cart),
+    path("newComment/", views.add_comment),
     path("searchByGenres/", views.search_by_genres),
     path("search/", views.search),
-    path("wishlist/<int:userid>", views.get_wishlist),
-    path("cart/<int:userid>", views.get_wishlist),
+    path("wishlist/<int:user_id>", views.get_wishlist),
+    path("cart/<int:user_id>", views.get_cart),
 ]
 
 
